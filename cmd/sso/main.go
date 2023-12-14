@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Qw1LL/sso/internal/app"
 	"github.com/Qw1LL/sso/internal/config"
 	"log/slog"
 	"os"
@@ -18,6 +19,10 @@ func main() {
 	log := setupLogger(cfg.Env)
 
 	log.Info("::: Starting application", slog.Any("cfg", cfg))
+
+	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
+
+	application.GRPCSrv.MustRun()
 }
 
 func setupLogger(env string) *slog.Logger {
